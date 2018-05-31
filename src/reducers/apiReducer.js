@@ -18,7 +18,8 @@ export default function apiReducer(state = initialState, action) {
         return {
           ...state,
           loading: false,
-          items: action.payload.item
+          items: action.payload
+
         };
   
       case FETCH_PRODUCTS_FAILURE:

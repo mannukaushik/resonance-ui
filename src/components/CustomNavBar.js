@@ -1,30 +1,24 @@
 import React from 'react';
-import { push } from 'react-router-redux';
-import { bindActionCreators } from 'redux';
-import { Route, Link } from 'react-router-dom'
-import { connect } from 'react-redux';
-import { increment, incrementAsync, decrement, decrementAsync } from '../reducers/counter';
-import '../css/styles.css';
+import { Link } from 'react-router-dom';
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import { Navbar, Nav, NavDropdown, MenuItem } from '../../node_modules/react-bootstrap/dist/react-bootstrap.min.js';
+import { MenuItem, Nav, NavDropdown, Navbar } from '../../node_modules/react-bootstrap/dist/react-bootstrap.min.js';
 import { resourceFactory } from '../actions/resourceFactory';
+import '../css/styles.css';
+import { connect } from 'react-redux';
 
 export class CustomNavbar extends React.Component {
-  componentDidMount() {
-    const a = this.props.dispatch(resourceFactory());
-    console.log(this.props);
+
+  callApiOnClick(apiUrl) {
+    this.props.dispatch(resourceFactory(apiUrl));
   }
+
   render() {
+    const { error, loading, item } = this.props;
 
-    const { error, loading, items } = this.props;
-    console.log(this.props);
-
-    if (loading) {
-      return <div>Loading...</div>;
+    if(loading){
+      return <div>Loading ...</div>
     }
-
     return (
-
       <div>
         <br />
         <Navbar className="nav-color" role="navigation">
@@ -36,7 +30,7 @@ export class CustomNavbar extends React.Component {
 
           <Nav pullRight>
             <NavDropdown eventKey={1} title="Home Audio" id="basic-nav-dropdown">
-              <MenuItem><Link to='/hometheaters/soundbars' className="nullifyLink" onClick={this.props.dispatch(resourceFactory())}><MenuItem eventKey={1.1} className="nullifyLink">Sound Bars</MenuItem></Link></MenuItem>
+              <MenuItem>{<Link to='/hometheaters/soundbars' className="nullifyLink" onClick={()=>this.callApiOnClick('http://localhost:8080/resonance/v1/products?type=homeTheater')}><MenuItem eventKey={1.1} className="nullifyLink">Sound Bars</MenuItem></Link>}</MenuItem>
               <MenuItem eventKey={1.2}>Home Theater Systems</MenuItem>
               <MenuItem eventKey={1.3}>Tower Speakers</MenuItem>
             </NavDropdown>
@@ -46,21 +40,13 @@ export class CustomNavbar extends React.Component {
               <MenuItem eventKey={2.2}>Why Buy Direct ?</MenuItem>
             </NavDropdown>
           </Nav>
-
         </Navbar>
       </div>
     );
   }
 }
-
-
 const mapStateToProps = state => ({
-  items: state.apiReducer.items.href, loading: state._links, error: state._links
+  item: state.apiReducer.items, loading: state.loading, error: state.error
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    ...bindActionCreators({ resourceFactory }, dispatch)
-  }
-}
-export default connect(mapStateToProps)(CustomNavbar, mapDispatchToProps);
+export default connect(mapStateToProps)(CustomNavbar);
