@@ -1,5 +1,16 @@
 {
-    "metamodel":{
-        "rel":"search"
+    "metamodel": {
+      "properties": [
+        {
+          "name": "modelName"
+        },
+        {
+          "name": "price"
+        },
+        {
+          "name": "imgSrc"
+        }
+      ],
+      "rel": "search"
     }
-}
+  }
