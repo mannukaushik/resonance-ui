@@ -3,7 +3,8 @@ import data from '../utils/metamodels/soundbars';
 export const FETCH_PRODUCTS_BEGIN = 'FETCH_PRODUCTS_BEGIN';
 export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS';
 export const FETCH_PRODUCTS_FAILURE = 'FETCH_PRODUCTS_FAILURE';
-var summaryItems;
+export const schemaSet = new Set();
+
 export function resourceFactory(apiUrl) {
 
   return dispatch => {
@@ -19,8 +20,8 @@ export function resourceFactory(apiUrl) {
               .then(handleErrors)
               .then(res => res.json())
               .then(json => {
-                dispatch(fetchProductsSuccess(json._links.item.map((item) => { item.summary }))
-                )
+                dispatch(fetchProductsSuccess(json._links.item.map((item) => { item.summary })), 
+                schemaSet)
               }
               )
           }
@@ -38,21 +39,28 @@ function handleErrors(response) {
   return response;
 }
 function insertSummary(json) {
-  const schemaSet = new Set();
+  const setIterator = schemaSet[Symbol.iterator]();
+  const values = setIterator.next().value;
+  var keys = Object.keys(values);
+  schemaSet.clear();
   json._options.links.map((fields) => {
+    if(fields.rel===data.metamodel.rel){
     schemaSet.add(fields.schema.properties);
+    }
   });
   data.metamodel.properties.map((metamodelNames) => {
-    if(schemaSet.includes(metamodelNames.name)){
-      
-    }
+    keys.forEach(function(key){
+      if(key===metamodelNames.name){
+        schemaSet.add(metamodelNames.name);
+      }
+    });
   });
 }
 export const fetchProductsBegin = () => ({ type: FETCH_PRODUCTS_BEGIN });
 
-export function fetchProductsSuccess(products) {
+export function fetchProductsSuccess(products, schemaSet) {
 
-  return { type: FETCH_PRODUCTS_SUCCESS, payload: products }
+  return { type: FETCH_PRODUCTS_SUCCESS, payload: products, schema: schemaSet }
 }
 
 export const fetchProductsError = error => ({
