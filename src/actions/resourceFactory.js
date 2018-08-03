@@ -9,24 +9,28 @@ export function resourceFactory(apiUrl) {
 
   return dispatch => {
     dispatch(fetchProductsBegin());
-    return fetch(apiUrl, { method: 'OPTIONS' })
+    return fetch(apiUrl, {method: 'OPTIONS'})
       .then(handleErrors)
       .then(res => res.json())
       .then(insertSummary)
       .then(json => {
-        dispatch(fetchProductsSuccess(json._options.links.map((links) => {
-          if ((links.method === 'GET') && (data.metamodel.rel === 'search')) {
-            fetch(links.href)
-              .then(handleErrors)
-              .then(res => res.json())
-              .then(json => {
-                dispatch(fetchProductsSuccess(json._links.item.map((item) => { item.summary })), 
-                schemaSet)
-              }
-              )
-          }
-        })));
-        return json;
+        json
+          ._options
+          .links
+          .map((links) => {
+            if ((links.method === 'GET') && (data.metamodel.rel === 'search')) {
+              fetch(links.href, {method: links.method})
+                .then(handleErrors)
+                .then(res => res.json())
+                .then(json => {
+                  dispatch(fetchProductsSuccess(json._links.item.map((item) => {
+                    return item.summary
+                  })))
+                  
+                })
+            }
+          });
+       
       })
       .catch(error => dispatch(fetchProductsError(error)));
   };
@@ -39,32 +43,42 @@ function handleErrors(response) {
   return response;
 }
 function insertSummary(json) {
-  const setIterator = schemaSet[Symbol.iterator]();
-  const values = setIterator.next().value;
-  var keys = Object.keys(values);
-  schemaSet.clear();
-  json._options.links.map((fields) => {
-    if(fields.rel===data.metamodel.rel){
-    schemaSet.add(fields.schema.properties);
-    }
-  });
-  data.metamodel.properties.map((metamodelNames) => {
-    keys.forEach(function(key){
-      if(key===metamodelNames.name){
-        schemaSet.add(metamodelNames.name);
+  json
+    ._options
+    .links
+    .map((fields) => {
+      if (fields.rel === data.metamodel.rel) {
+        schemaSet.add(fields.schema.properties);
       }
     });
-  });
+
+  const setIterator = schemaSet[Symbol.iterator]();
+  const values = setIterator
+    .next()
+    .value;
+  var keys = Object.keys(values);
+  schemaSet.clear();
+
+  data
+    .metamodel
+    .properties
+    .map((metamodelNames) => {
+      keys
+        .forEach(function (key) {
+          if (key === metamodelNames.name) {
+            schemaSet.add(metamodelNames.name);
+          }
+        });
+    });
+  return json;
 }
-export const fetchProductsBegin = () => ({ type: FETCH_PRODUCTS_BEGIN });
+export const fetchProductsBegin = () => ({type: FETCH_PRODUCTS_BEGIN});
 
-export function fetchProductsSuccess(products, schemaSet) {
+export function fetchProductsSuccess(products) {
 
-  return { type: FETCH_PRODUCTS_SUCCESS, payload: products, schema: schemaSet }
+  return {type: FETCH_PRODUCTS_SUCCESS, payload: products}
 }
 
-export const fetchProductsError = error => ({
-  type: FETCH_PRODUCTS_FAILURE, payload: {
+export const fetchProductsError = error => ({type: FETCH_PRODUCTS_FAILURE, payload: {
     error
-  }
-});
+  }});
