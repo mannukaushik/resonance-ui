@@ -10,8 +10,8 @@ export function resourceFactory(apiUrl) {
   return dispatch => {
     dispatch(fetchProductsBegin());
     return fetch(apiUrl, {
-      method: 'OPTIONS'
-    })
+        method: 'OPTIONS'
+      })
       .then(handleErrors)
       .then(res => res.json())
       .then(insertSummary)
@@ -19,31 +19,23 @@ export function resourceFactory(apiUrl) {
         json._options.links.map((links) => {
           if ((links.method === 'GET') && (data.metamodel.rel === 'search')) {
             fetch(links.href, {
-              method: links.method
-            })
+                method: links.method
+              })
               .then(handleErrors)
               .then(res => res.json())
               .then(json => {
                 dispatch(fetchProductsSuccess(json._links.item.map((item) => {
                   const keys = Object.keys(item.summary);
-                  keys.map((key) => {
-
+                  keys.forEach((key) => {
                     if (schemaSet.has(key)) {
-                      summaryObject.key = keys.map((key) => {
-                        item.summary.filter(
-                          (data) => { return data.key === key }
-                        );
-                        return key;
-                      })
+                      summaryObject[key] = item.summary[key];
                     }
                   });
-
+                  return summaryObject;
                 })))
-
               })
           }
         });
-
       })
       .catch(error => dispatch(fetchProductsError(error)));
   };
