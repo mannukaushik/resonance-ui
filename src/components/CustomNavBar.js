@@ -5,6 +5,7 @@ import { MenuItem, Nav, NavDropdown, Navbar } from '../../node_modules/react-boo
 import { resourceFactory } from '../actions/resourceFactory';
 import '../css/styles.css';
 import { connect } from 'react-redux';
+export var location = ''; 
 
 export class CustomNavbar extends React.Component {
 
@@ -14,6 +15,7 @@ export class CustomNavbar extends React.Component {
 
   render() {
     const { error, loading, item } = this.props;
+    location = this.props.location;
 
     if(loading){
       return <div>Loading ...</div>
