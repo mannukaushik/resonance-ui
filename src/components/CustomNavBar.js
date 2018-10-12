@@ -5,15 +5,17 @@ import { MenuItem, Nav, NavDropdown, Navbar } from '../../node_modules/react-boo
 import { resourceFactory } from '../actions/resourceFactory';
 import '../css/styles.css';
 import { connect } from 'react-redux';
-export var location = ''; 
 
+export var location = ''; 
 export class CustomNavbar extends React.Component {
+  
 
   callApiOnClick(apiUrl) {
     this.props.dispatch(resourceFactory(apiUrl));
   }
-
+  
   render() {
+    const configuration = require('../utils/metamodels/config.json');
     const { error, loading, item } = this.props;
     location = this.props.location;
 
@@ -32,7 +34,8 @@ export class CustomNavbar extends React.Component {
 
           <Nav pullRight>
             <NavDropdown eventKey={1} title="Home Audio" id="basic-nav-dropdown">
-              <MenuItem>{<Link to='/hometheaters/soundbars' className="nullifyLink" onClick={()=>this.callApiOnClick('http://localhost:8080/resonance/v1/products?type=homeTheater')}><MenuItem eventKey={1.1} className="nullifyLink">Sound Bars</MenuItem></Link>}</MenuItem>
+              <MenuItem>{<Link to='/products/soundbars' className="nullifyLink" onClick={()=>this.callApiOnClick(configuration.config.apiUrl + configuration.config.context[0].resonanceApi + 'products')}><MenuItem eventKey={1.1} className="nullifyLink">Sound Bars</MenuItem></Link>}</MenuItem>
+        
               <MenuItem eventKey={1.2}>Home Theater Systems</MenuItem>
               <MenuItem eventKey={1.3}>Tower Speakers</MenuItem>
             </NavDropdown>

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route} from 'react-router-dom';
 import CustomNavBar from '../components/CustomNavBar';
 import ImageLoader from '../components/ImageLoader';
-import soundBars from '../components/SoundBars';
+import soundBars from '../components/soundBars';
 
 const App = () => (
   <div>
@@ -12,7 +12,7 @@ const App = () => (
 
     <main>
       <Route exact path="/" component={ImageLoader} />
-      <Route exact path="/hometheaters/soundbars" component={soundBars} />
+      <Route exact path="/products/soundbars" component={soundBars} />
     </main>
   </div>
 )

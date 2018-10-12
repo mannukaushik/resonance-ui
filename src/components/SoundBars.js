@@ -7,7 +7,7 @@ export class soundBars extends React.Component {
     render() {
         const { item } = this.props;
         
-        if(item.length===0 || item[0]==undefined){
+        if(item.length===0 || item[0]===undefined){
             return <span>Loading...</span>
         }
         return (

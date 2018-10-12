@@ -18,7 +18,7 @@ export function resourceFactory(apiUrl) {
       .then(insertSummary)
       .then(json => {
         json._options.links.map((links) => {
-          if ((links.method === 'GET') && (data.metamodel.rel === 'search')) {
+          if ((links.method === 'GET') && (data.metamodel.rel==='soundBar')) {
             fetch(links.href, {
                 method: links.method
               })
@@ -36,6 +36,7 @@ export function resourceFactory(apiUrl) {
                 })))
               })
           }
+          
         });
       })
       .catch(error => dispatch(fetchProductsError(error)));
