@@ -5,6 +5,7 @@ export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS';
 export const FETCH_PRODUCTS_FAILURE = 'FETCH_PRODUCTS_FAILURE';
 export const schemaSet = new Set();
 export let data = '';
+
 export function resourceFactory(apiUrl) {
   var summaryObject = {};
   return dispatch => {
@@ -18,8 +19,9 @@ export function resourceFactory(apiUrl) {
       .then(insertSummary)
       .then(json => {
         json._options.links.map((links) => {
-          if ((links.method === 'GET') && (data.metamodel.rel==='soundBar')) {
-            fetch(links.href, {
+          if ((links.method === 'GET') && (data.metamodel.rel===links.rel)) {
+            const href = links.type!=undefined?links.href+'?type='+data.metamodel.type:links.href; 
+            fetch(href, {
                 method: links.method
               })
               .then(handleErrors)

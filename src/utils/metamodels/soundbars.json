@@ -1,6 +1,7 @@
 {
     "metamodel": {
       "resource":"products",
+      "type":"soundBars",
       "properties": [
         {
           "name": "modelName"
@@ -12,6 +13,6 @@
           "name": "imgSrc"
         }
       ],
-      "rel": "soundBar"
+      "rel": "search"
     }
   }
