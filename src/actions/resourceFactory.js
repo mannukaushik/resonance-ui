@@ -20,7 +20,7 @@ export function resourceFactory(apiUrl) {
       .then(json => {
         json._options.links.map((links) => {
           if ((links.method === 'GET') && (data.metamodel.rel===links.rel)) {
-            const href = links.type!=undefined?links.href+'?type='+data.metamodel.type:links.href; 
+            const href = links.type!=undefined && links.type.includes(data.metamodel.type)?links.href+'?type='+data.metamodel.type:links.href; 
             fetch(href, {
                 method: links.method
               })
