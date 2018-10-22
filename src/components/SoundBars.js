@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-
 export class soundBars extends React.Component {
 
     render() {
@@ -12,7 +11,7 @@ export class soundBars extends React.Component {
         }
         return (
             <div>
-                <span>{item.map((itemSummary)=>itemSummary.modelName)}</span>
+               {item.map((itemSummary)=> <div><span>{itemSummary.modelName}</span><br/><span>{itemSummary.price}</span><br/></div>)}
             </div>
         );
     }

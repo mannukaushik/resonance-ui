@@ -6,24 +6,26 @@ export const FETCH_PRODUCTS_FAILURE = 'FETCH_PRODUCTS_FAILURE';
 export const schemaSet = new Set();
 export let data = '';
 
+var innerObject = [];
 export function resourceFactory(apiUrl) {
-  var summaryObject = {};
+  
+  var summaryObject = new Object();
   return dispatch => {
 
     dispatch(fetchProductsBegin());
     return fetch(apiUrl, {
-        method: 'OPTIONS'
-      })
+      method: 'OPTIONS'
+    })
       .then(handleErrors)
       .then(res => res.json())
       .then(insertSummary)
       .then(json => {
         json._options.links.map((links) => {
-          if ((links.method === 'GET') && (data.metamodel.rel===links.rel)) {
-            const href = links.type!=undefined && links.type.includes(data.metamodel.type)?links.href+'?type='+data.metamodel.type:links.href; 
+          if ((links.method === 'GET') && (data.metamodel.rel === links.rel)) {
+            const href = links.type !== undefined && links.type.includes(data.metamodel.type) ? links.href + '?type=' + data.metamodel.type : links.href;
             fetch(href, {
-                method: links.method
-              })
+              method: links.method
+            })
               .then(handleErrors)
               .then(res => res.json())
               .then(json => {
@@ -34,11 +36,12 @@ export function resourceFactory(apiUrl) {
                       summaryObject[key] = item.summary[key];
                     }
                   });
-                  return summaryObject;
+                    innerObject.push(JSON.parse(JSON.stringify(summaryObject)));
+          
                 })))
               })
           }
-          
+
         });
       })
       .catch(error => dispatch(fetchProductsError(error)));
@@ -53,8 +56,8 @@ function handleErrors(response) {
   return response;
 }
 
-function findMetamodelName(){
-  if (location.pathname.split("/").length-1>=2) {
+function findMetamodelName() {
+  if (location.pathname.split("/").length - 1 >= 2) {
     data = require('../utils/metamodels/' + location.pathname.split('/')[2]);
   }
 }
@@ -88,7 +91,7 @@ export function fetchProductsSuccess(products) {
 
   return {
     type: FETCH_PRODUCTS_SUCCESS,
-    payload: products
+    payload: innerObject
   }
 }
 
