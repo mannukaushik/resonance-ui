@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
 import appConf from '../utils/metamodels/config.json';
-import '../css/styles.css';
+import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../css/styles.css'
 
 export class soundBars extends React.Component {
 
@@ -17,25 +18,32 @@ export class soundBars extends React.Component {
             <div>
                 <ReactTable data={item} columns={[
                     {
-                        Header: "SoundBars",
+                        Header: "Sound Bars",
+                        headerClassName:"headers page-header table",
                         columns: [
                             {     
-                                id: "imgSrc",                           
-                                Cell: ()=><img src ={appConf.config.publicUrl + item[0].imgSrc} alt={item.modelName} class="thumbnail"/>
+                                id: "imgSrc",
+                                accessor:"imgSrc",                                       
+                                Cell: (props)=><img src ={appConf.config.publicUrl + props.original.imgSrc} alt={props.original.modelName} class="img-thumbnail"/>
                             },
                             {
                                 Header:"Product Name",
-                                accessor: "modelName"
+                                accessor: "modelName",
+                                headerClassName:"in-headers page-header",
+                                className:"text-center margin-top"
+                               
                                 
                             },
                             {
                                 Header:"Price",
-                                accessor : "price"
+                                accessor : "price",
+                                headerClassName:"in-headers page-header",
+                                className:"text-center margin-top"
                             }
                         ]
 
                     }]}
-                    defaultPageSize={10}
+                    defaultPageSize={5}
                     className="-striped -highlight"
                     ></ReactTable>
             </div>

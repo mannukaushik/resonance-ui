@@ -17,10 +17,14 @@
     text-decoration: none !important;
    
 }
-.thumbnail{
-    height:150px;
-    width:400px;
+.headers{
+    font-weight: bold;
+    font-size: 30px;
 }
-.center{
-    text-align: center;
+.in-headers{
+    font-weight: normal;
+    font-size: 20px;
+}
+.margin-top{
+    margin-top:100px
 }
