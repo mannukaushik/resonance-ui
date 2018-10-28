@@ -25,7 +25,7 @@ export class CustomNavbar extends React.Component {
     return (
       <div>
         <br />
-        <Navbar className="nav-color" role="navigation">
+        <Navbar className="nav-color container" role="navigation">
           <Navbar.Header>
             <Navbar.Brand className="nav-color-text">
               <a href="/">Resonance</a>
@@ -39,7 +39,7 @@ export class CustomNavbar extends React.Component {
               <MenuItem eventKey={1.2}>Home Theater Systems</MenuItem>
               <MenuItem eventKey={1.3}>Tower Speakers</MenuItem>
             </NavDropdown>
-            <NavDropdown eventKey={2} title="Support" id="basic-nav-dropdown">
+            <NavDropdown eventKey={2} title="Support" id="basic-nav-dropdown" className="left">
               <MenuItem eventKey={2.1}>Contact Us</MenuItem>
               <MenuItem divider />
               <MenuItem eventKey={2.2}>Why Buy Direct ?</MenuItem>
